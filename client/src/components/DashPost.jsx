@@ -58,7 +58,7 @@ export default function DashPost() {
                 prev.filter((post) => post._id !== postIdToDelete));
             }
         } catch (error) {
-            
+            console.log(error.message);
         }
     };
   return (
