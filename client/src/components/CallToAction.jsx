@@ -1,5 +1,6 @@
 import { Button } from 'flowbite-react'
 import React from 'react'
+import CommentSection from './CommentSection'
 
 export default function () {
   return (
@@ -18,6 +19,7 @@ export default function () {
         <div className='p-7 flex-1 '>
             <img src="https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg" />
         </div>
+        
     </div>
     
   )
