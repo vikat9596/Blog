@@ -1,5 +1,4 @@
 import { Alert, Button, Textarea } from 'flowbite-react';
-import { set } from 'mongoose';
 import React, { useState } from 'react'
 import {useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -57,7 +56,7 @@ export default function CommentSection({postId}) {
                 placeholder='Add a comment...'
                 rows='3'
                 maxLength='200'
-                onChange={(e) => setComment(e.target.value)} />
+                onChange={(e) => setComment(e.target.value)} value={comment}/>
                 <div className="flex justify-between items-center mt-5">
                     <p className='text-gray-500 text-xs'>{200 - comment.length} characters remaining</p>
                     <Button outline gradientDuoTone='purpleToBlue'
