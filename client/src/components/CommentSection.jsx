@@ -1,4 +1,4 @@
-import { Alert, Button, Textarea } from 'flowbite-react';
+import { Alert, Button, Modal, Textarea } from 'flowbite-react';
 import React, { useState ,useEffect} from 'react'
 import {useSelector} from 'react-redux';
 import { Link , useNavigate} from 'react-router-dom';
@@ -10,6 +10,8 @@ export default function CommentSection({postId}) {
     const [comment, setComment] = useState('');
     const [commentError, setCommentError] = useState(null);
     const [comments, setComments] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [commentToDelete, setCommentToDelete] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -89,6 +91,25 @@ export default function CommentSection({postId}) {
           )
         );
       };
+
+      const handleDelete = async (commentId) => {
+        setShowModal(false);
+        try {
+          if (!currentUser) {
+            navigate('/sign-in');
+            return;
+          }
+          const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+            method: 'DELETE',
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setComments(comments.filter((comment) => comment._id !== commentId));
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
         {currentUser ? 
@@ -140,10 +161,31 @@ export default function CommentSection({postId}) {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              
+              }}
             />
           ))}
         </>
       )}
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
+        <Modal.Header>
+          <h3 >Delete Comment</h3>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are you sure you want to delete this comment?</h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button gradientDuoTone='purpleToBlue' onClick={() => setShowModal(false)} outline>
+            Cancel
+          </Button>
+          <Button color='failure' onClick={() => handleDelete(commentToDelete)}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
